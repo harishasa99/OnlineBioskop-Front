@@ -1,0 +1,196 @@
+.card {
+  height: 400px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card img {
+  height: 65%;
+  object-fit: cover;
+}
+
+.card-body {
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.carousel img {
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.fa-heart {
+  transition: color 0.3s ease-in-out;
+}
+
+.fa-heart:hover {
+  transform: scale(1.2);
+}
+
+/* Footer */
+
+/* Osiguranje da html i body zauzimaju celu visinu */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Kontejner koji osigurava sticky footer */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* Glavni sadržaj stranice koji rasteže prostor između headera i footera */
+.content {
+  flex: 1; /* Rasteže sadržaj */
+}
+
+/* Stilovi footera */
+.footer {
+  background-color: #212529; /* Dark background */
+  color: #fff; /* White text */
+  text-align: center; /* Center all text */
+  padding: 1rem 0;
+  margin-top: auto; /* Obezbeđuje da footer bude na dnu */
+}
+
+.footer .text-uppercase {
+  font-weight: bold;
+}
+
+.footer ul {
+  padding: 0;
+  list-style: none;
+}
+
+.footer ul li {
+  margin: 0.5rem 0; /* Add spacing between links */
+}
+
+.footer a {
+  color: #ffc107; /* Yellow links */
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: #fff; /* White text on hover */
+}
+
+.footer .fab {
+  transition: transform 0.3s;
+}
+
+.footer .fab:hover {
+  transform: scale(1.2); /* Enlarge icons on hover */
+}
+
+.footer .row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* Equal spacing between columns */
+}
+
+.footer .col {
+  flex: 1;
+  max-width: 300px;
+}
+
+/* Sidebar */
+
+.user-sidebar {
+  background-color: #222;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  overflow-y: auto;
+}
+
+.user-sidebar .nav-link {
+  color: #bbb;
+  font-size: 16px;
+  padding: 12px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.user-sidebar .nav-link:hover,
+.user-sidebar .nav-link.active {
+  background-color: #444;
+  color: #fff;
+}
+
+.user-sidebar .logout {
+  margin-top: 20px;
+}
+
+.user-sidebar .logout button {
+  font-size: 16px;
+  padding: 10px;
+}
+
+/* Responzivni sidebar */
+@media (max-width: 768px) {
+  .user-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* Izmeni podatke */
+.custom-table {
+  background-color: #343a40 !important;
+  border-radius: 8px;
+}
+
+.custom-table th {
+  background-color: #212529;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+.custom-table td {
+  background-color: #2d3238;
+  color: #ddd;
+  padding: 12px;
+  border-top: 1px solid #444;
+}
+
+.custom-table tbody tr:hover {
+  background-color: transparent !important; /* ✅ Uklonjen hover */
+}
+
+/* ✅ Bele opcije - Crveni hover */
+.dropdown-menu .dropdown-item {
+  color: white !important; /* Uvek bela slova */
+  padding: 10px 15px;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: red !important;
+  color: white !important;
+}
+
+/* ✅ "Odjavi se" - Beli hover */
+.dropdown-menu .logout-hover {
+  color: red !important;
+}
+.dropdown-menu .logout-hover:hover {
+  background-color: white !important;
+  color: red !important;
+}
