@@ -11,8 +11,8 @@ const MovieCard = ({ movie }) => {
   const [favourite, setFavourite] = useState(isFavourite(movie._id));
 
   useEffect(() => {
-    setFavourite(isFavourite(movie._id));
-  }, [favourites]);
+    setFavourite(isFavourite);
+  }, [isFavourite, movie._id]);
 
   const handleCardClick = () => {
     if (!movie._id) return;

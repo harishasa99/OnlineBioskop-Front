@@ -21,9 +21,9 @@ const Registracija = () => {
   };
 
   // Funkcija za proveru ispravnosti e-mail adrese
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  // const validateEmail = (email) => {
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
   };
 
   // Funkcija za slanje podataka na backend
