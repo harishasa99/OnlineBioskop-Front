@@ -1,59 +1,115 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import dedaMrazImage from "../assets/images/slika1.jpg";
-
-// Simulirani podaci o filmu
-const movieData = {
-  title: "Bob Dylan: Potpuni Neznanac",
-  cinema: "Cineplexx Big Kragujevac",
-  hall: "Sala 2",
-  format: "2D",
-  showtime: "14.01.2025, 20:00",
-  pricePerTicket: 590,
-  image: dedaMrazImage, // Zameni sa stvarnom slikom
-};
 
 const Confirmation = () => {
   const { state } = useLocation();
-  const { selectedSeats = [] } = state || {}; // Uzmi sedišta iz state-a ili postavi podrazumevanu vrednost
   const navigate = useNavigate();
 
-  const totalPrice = selectedSeats.length * movieData.pricePerTicket;
+  const {
+    movieTitle,
+    movieImage = "/default-movie.jpg",
+    cinemaName,
+    cinemaLocation,
+    showtime,
+    selectedSeats = [],
+    pricePerTicket,
+    cinemaId,
+    movieId,
+    userId,
+  } = state || {};
 
-  const handleRateMovie = () => {
-    navigate("/rate-movie", { state: { movie: movieData } });
+  const totalPrice = selectedSeats.length * pricePerTicket;
+
+  // ✅ Funkcija za kupovinu karata
+  const handlePurchase = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      alert("Morate biti prijavljeni da biste kupili kartu.");
+      navigate("/login");
+      return;
+    }
+
+    if (
+      !userId ||
+      !movieId ||
+      !cinemaId ||
+      !showtime ||
+      selectedSeats.length === 0
+    ) {
+      alert(
+        "Nedostaju podaci za kupovinu. Proverite da li ste izabrali sve opcije."
+      );
+      return;
+    }
+
+    const requestData = {
+      userId,
+      movieId,
+      cinemaId,
+      showtime: new Date(showtime).toISOString(),
+      seats: selectedSeats,
+    };
+
+    console.log("📌 Šaljem podatke na backend:", requestData);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/tickets/purchase",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      const responseData = await response.json();
+      console.log("📩 Backend odgovor:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || "Greška pri kupovini karata.");
+      }
+
+      alert("🎉 Uspešno ste kupili karte!");
+      navigate("/rate-movie", {
+        state: {
+          movieTitle,
+          movieImage,
+          movieId,
+        },
+      }); // ✅ SADA ISPRAVNO PROSLEĐUJEMO PODATKE KA RATE MOVIE STRANICI
+    } catch (error) {
+      console.error("❌ Greška pri kupovini karata:", error);
+      alert(error.message || "Došlo je do greške pri kupovini.");
+    }
   };
 
   return (
     <div className="container my-5 text-light">
       <div className="row bg-dark p-4 rounded shadow-lg">
-        {/* Sekcija sa slikom filma */}
         <div className="col-md-4">
           <img
-            src={movieData.image}
-            alt={movieData.title}
+            src={
+              movieImage.startsWith("/")
+                ? `http://localhost:5000${movieImage}`
+                : movieImage
+            }
+            alt={movieTitle || "Film"}
             className="img-fluid rounded shadow-sm"
-            style={{ objectFit: "cover" }}
+            style={{ maxHeight: "300px", objectFit: "cover" }}
           />
         </div>
-
-        {/* Sekcija sa informacijama o rezervaciji */}
         <div className="col-md-8">
-          <h3 className="text-uppercase fw-bold text-danger">
-            {movieData.title}
-          </h3>
-          <h5 className="text-uppercase text-danger">{movieData.cinema}</h5>
+          <h3 className="text-uppercase fw-bold text-danger">{movieTitle}</h3>
+          <h5 className="text-uppercase text-danger">
+            {cinemaName} - {cinemaLocation}
+          </h5>
           <p>
-            <strong>Datum i vreme:</strong> {movieData.showtime}
+            <strong>Datum i vreme:</strong> {showtime}
           </p>
-          <p>
-            <strong>Sala:</strong> {movieData.hall}
-          </p>
-          <p>
-            <strong>Format:</strong> {movieData.format}
-          </p>
-
-          {/* Izabrana sedišta */}
           <div className="my-3">
             <h6 className="text-danger fw-bold">Izabrana sedišta:</h6>
             <p>
@@ -63,14 +119,13 @@ const Confirmation = () => {
             </p>
           </div>
 
-          {/* Cena i dugme za kupovinu */}
           <div className="bg-secondary p-3 rounded text-white">
-            <p className="mb-2">
+            <p>
               <strong>Ukupno karata:</strong> {selectedSeats.length}
             </p>
-            <p className="mb-2">
-              <strong>Cena po karti:</strong>{" "}
-              {movieData.pricePerTicket.toLocaleString()} RSD
+            <p>
+              <strong>Cena po karti:</strong> {pricePerTicket.toLocaleString()}{" "}
+              RSD
             </p>
             <h4>
               <strong>Ukupna cena:</strong> {totalPrice.toLocaleString()} RSD
@@ -84,16 +139,14 @@ const Confirmation = () => {
             >
               ← Nazad
             </button>
-            <button className="btn btn-danger" onClick={handleRateMovie}>
+            <button
+              className="btn btn-danger"
+              onClick={handlePurchase}
+              disabled={!userId}
+            >
               Kupi
             </button>
           </div>
-
-          {/* Informacija o prijavi */}
-          <p className="mt-3 text-muted text-center">
-            Niste prijavljeni? <br />
-            Ukoliko želite da kupite karte, neophodno je da se prijavite.
-          </p>
         </div>
       </div>
     </div>

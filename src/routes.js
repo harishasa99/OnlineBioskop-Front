@@ -5,7 +5,6 @@ import { Routes, Route } from "react-router-dom";
 import Preporuceno from "./pages/Preporuceno";
 import UBioskopu from "./pages/UBioskopu";
 import Uskoro from "./pages/Uskoro";
-import ChooseCinema from "./pages/ChooseCinema";
 import Reservation from "./pages/Reservation";
 import SeatSelection from "./pages/SeatSelection";
 import Confirmation from "./pages/Confirmation";
@@ -23,37 +22,44 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminUsers from "./pages/AdminUsers";
 import AdminMovies from "./pages/AdminMovies";
 import AdminCinemas from "./pages/AdminCinemas";
+import MojeUlaznice from "./pages/MojeUlaznice";
+import MojaListaGledanja from "./pages/MojaListaGledanja";
+import ProtectedRouteUser from "./components/ProtectedRouteUser";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Glavne stranice */}
       <Route path="/" element={<Preporuceno />} />
       <Route path="/preporuceno" element={<Preporuceno />} />
       <Route path="/u-bioskopu" element={<UBioskopu />} />
       <Route path="/uskoro" element={<Uskoro />} />
-      {/* Stranice za proces kupovine */}
       <Route path="/film/:id" element={<FilmDetails />} />
-      <Route path="/cinema" element={<ChooseCinema />} />
       <Route
         path="/reservation/:cinemaId/:showtimeId"
-        element={<Reservation />}
+        element={<ProtectedRouteUser element={<Reservation />} />}
       />
-      <Route path="/seats/:cinemaId/:showtimeId" element={<SeatSelection />} />
+
+      <Route
+        path="/seats/:cinemaId/:showtimeId"
+        element={<ProtectedRouteUser element={<SeatSelection />} />}
+      />
       <Route
         path="/confirmation/:cinemaId/:showtimeId"
-        element={<Confirmation />}
+        element={<ProtectedRouteUser element={<Confirmation />} />}
       />
+
       {/* Ostale stranice */}
       <Route path="/search" element={<SearchPage />} />
-      <Route path="/rate-movie" element={<RateMovie />} />
+      <Route
+        path="/rate-movie"
+        element={<ProtectedRouteUser element={<RateMovie />} />}
+      />
       <Route path="/registracija" element={<Registracija />} />
       <Route path="/prijava" element={<Prijava />} />
       <Route path="/verifikacija/:token" element={<Verifikacija />} />
       <Route path="/moj-nalog" element={<MojNalog />} />
       <Route path="/izmeni-podatke" element={<IzmeniPodatke />} />
       <Route path="/promeni-lozinku" element={<PromeniLozinku />} />
-      {/* Admin Panel (zaštićena ruta) */}
       <Route
         path="/admin"
         element={<ProtectedRoute element={<AdminDashboard />} />}
@@ -69,6 +75,14 @@ const AppRoutes = () => {
       <Route
         path="/admin/cinemas"
         element={<ProtectedRoute element={<AdminCinemas />} />}
+      />
+      <Route
+        path="/moje-ulaznice"
+        element={<ProtectedRouteUser element={<MojeUlaznice />} />}
+      />
+      <Route
+        path="/moja-lista"
+        element={<ProtectedRouteUser element={<MojaListaGledanja />} />}
       />
     </Routes>
   );

@@ -42,7 +42,14 @@ const FilmDetails = () => {
     return <h2 className="text-center text-light">Film nije pronađen!</h2>;
 
   const handleTicketPurchase = (cinemaId, showtime) => {
-    navigate(`/reservation/${cinemaId}/${showtime}`);
+    navigate(`/reservation/${cinemaId}/${showtime}`, {
+      state: {
+        cinemaId,
+        showtime,
+        movieId: movie._id, // Ovaj podatak mora postojati!
+        movieImage: movie.image, // Dodajemo sliku filma
+      },
+    });
   };
 
   const releaseDateFormatted = movie.releaseDate

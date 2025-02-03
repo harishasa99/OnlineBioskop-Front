@@ -7,6 +7,7 @@ const AdminCinemas = () => {
   const [selectedCinema, setSelectedCinema] = useState("");
   const [selectedMovie, setSelectedMovie] = useState("");
   const [showtime, setShowtime] = useState("");
+  const [showDate, setShowDate] = useState("");
 
   useEffect(() => {
     fetchCinemas();
@@ -15,7 +16,11 @@ const AdminCinemas = () => {
 
   const fetchCinemas = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/cinemas");
+      const response = await fetch("http://localhost:5000/api/cinemas", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       const data = await response.json();
       setCinemas(data);
     } catch (error) {
@@ -25,7 +30,11 @@ const AdminCinemas = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/movies");
+      const response = await fetch("http://localhost:5000/api/movies", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       const data = await response.json();
       setMovies(data);
     } catch (error) {
@@ -60,6 +69,44 @@ const AdminCinemas = () => {
     }
   };
 
+  const handleAddMovieToCinema = async () => {
+    if (!selectedCinema || !selectedMovie || !showtime || !showDate) {
+      alert("Molimo popunite sva polja.");
+      return;
+    }
+
+    const dateTime = `${showDate} ${showtime}`;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/cinemas/${selectedCinema}/addMovie`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({
+            movieId: selectedMovie,
+            showtimes: [dateTime],
+          }),
+        }
+      );
+
+      if (response.ok) {
+        fetchCinemas();
+        setSelectedCinema("");
+        setSelectedMovie("");
+        setShowtime("");
+        setShowDate("");
+      } else {
+        console.error("Greška pri dodavanju filma u bioskop.");
+      }
+    } catch (error) {
+      console.error("Greška:", error);
+    }
+  };
+
   const handleDeleteCinema = async (id) => {
     if (!window.confirm("Da li ste sigurni da želite da obrišete bioskop?"))
       return;
@@ -68,6 +115,7 @@ const AdminCinemas = () => {
       const response = await fetch(`http://localhost:5000/api/cinemas/${id}`, {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
@@ -82,52 +130,10 @@ const AdminCinemas = () => {
     }
   };
 
-  const handleAddMovieToCinema = async () => {
-    if (!selectedCinema || !selectedMovie || !showtime) {
-      alert("Molimo popunite sva polja.");
-      return;
-    }
-
-    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    if (!timeRegex.test(showtime)) {
-      alert("Molimo unesite ispravno vreme (HH:MM)");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/cinemas/${selectedCinema}/addMovie`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: JSON.stringify({
-            movieId: selectedMovie,
-            showtimes: [showtime],
-          }),
-        }
-      );
-
-      if (response.ok) {
-        fetchCinemas();
-        setSelectedCinema("");
-        setSelectedMovie("");
-        setShowtime("");
-      } else {
-        console.error("Greška pri dodavanju filma u bioskop.");
-      }
-    } catch (error) {
-      console.error("Greška:", error);
-    }
-  };
-
   return (
     <div className="container my-5">
       <h2 className="text-center text-danger">Upravljanje bioskopima</h2>
 
-      {/* 📌 Forma za dodavanje bioskopa */}
       <div className="card p-4 mb-4 shadow">
         <h4>Dodaj novi bioskop</h4>
         <div className="row">
@@ -161,7 +167,6 @@ const AdminCinemas = () => {
         </div>
       </div>
 
-      {/* 📌 Forma za dodavanje filma u bioskop */}
       <div className="card p-4 mb-4 shadow">
         <h4>Dodaj film u bioskop</h4>
         <div className="row">
@@ -172,12 +177,11 @@ const AdminCinemas = () => {
               onChange={(e) => setSelectedCinema(e.target.value)}
             >
               <option value="">Izaberi bioskop</option>
-              {cinemas.length > 0 &&
-                cinemas.map((cinema) => (
-                  <option key={cinema._id} value={cinema._id}>
-                    {cinema.name}
-                  </option>
-                ))}
+              {cinemas.map((cinema) => (
+                <option key={cinema._id} value={cinema._id}>
+                  {cinema.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-md-4">
@@ -187,19 +191,25 @@ const AdminCinemas = () => {
               onChange={(e) => setSelectedMovie(e.target.value)}
             >
               <option value="">Izaberi film</option>
-              {movies.length > 0 &&
-                movies.map((movie) => (
-                  <option key={movie._id} value={movie._id}>
-                    {movie.title}
-                  </option>
-                ))}
+              {movies.map((movie) => (
+                <option key={movie._id} value={movie._id}>
+                  {movie.title}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-md-2">
             <input
-              type="text"
+              type="date"
               className="form-control mb-2"
-              placeholder="Vreme (HH:MM)"
+              value={showDate}
+              onChange={(e) => setShowDate(e.target.value)}
+            />
+          </div>
+          <div className="col-md-2">
+            <input
+              type="time"
+              className="form-control mb-2"
               value={showtime}
               onChange={(e) => setShowtime(e.target.value)}
             />
@@ -215,7 +225,6 @@ const AdminCinemas = () => {
         </div>
       </div>
 
-      {/* 📌 Pregled bioskopa i filmova */}
       <div className="table-responsive">
         <table className="table table-dark table-bordered">
           <thead>

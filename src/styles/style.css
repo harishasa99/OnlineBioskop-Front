@@ -106,52 +106,6 @@ body {
   max-width: 300px;
 }
 
-/* Sidebar */
-
-.user-sidebar {
-  background-color: #222;
-  color: white;
-  height: 100vh;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  overflow-y: auto;
-}
-
-.user-sidebar .nav-link {
-  color: #bbb;
-  font-size: 16px;
-  padding: 12px;
-  display: block;
-  transition: background 0.3s, color 0.3s;
-}
-
-.user-sidebar .nav-link:hover,
-.user-sidebar .nav-link.active {
-  background-color: #444;
-  color: #fff;
-}
-
-.user-sidebar .logout {
-  margin-top: 20px;
-}
-
-.user-sidebar .logout button {
-  font-size: 16px;
-  padding: 10px;
-}
-
-/* Responzivni sidebar */
-@media (max-width: 768px) {
-  .user-sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-}
-
 /* Izmeni podatke */
 .custom-table {
   background-color: #343a40 !important;

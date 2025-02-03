@@ -58,7 +58,7 @@ const Navbar = () => {
                   <i className="fas fa-user"></i> Zdravo, {user.firstName}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end bg-dark">
-                  {user.role === "admin" && ( // ✅ Samo admin vidi Admin Panel
+                  {user.role === "admin" && (
                     <li>
                       <Link className="dropdown-item text-warning" to="/admin">
                         <i className="fas fa-cogs"></i> Admin Panel
@@ -76,14 +76,6 @@ const Navbar = () => {
                       to="/moje-ulaznice"
                     >
                       <i className="fas fa-ticket-alt"></i> Moje ulaznice
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="dropdown-item text-light"
-                      to="/moja-istorija"
-                    >
-                      <i className="fas fa-history"></i> Moja istorija
                     </Link>
                   </li>
                   <li>

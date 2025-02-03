@@ -1,35 +1,92 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { UserContext } from "./UserContext";
 
-// Kreiranje konteksta
 const FavouriteContext = createContext();
 
-// Hook za korišćenje konteksta
 export const useFavourite = () => useContext(FavouriteContext);
 
-// Provider komponenta
 export const FavouriteProvider = ({ children }) => {
-  const [favourites, setFavourites] = useState(
-    JSON.parse(localStorage.getItem("favourites")) || []
-  );
+  const { user, isAuthenticated } = useContext(UserContext);
+  const [favourites, setFavourites] = useState([]);
 
-  const addToFavourites = (movie) => {
-    setFavourites((prev) => {
-      const updatedFavourites = [...prev, movie];
-      localStorage.setItem("favourites", JSON.stringify(updatedFavourites));
-      return updatedFavourites;
-    });
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchFavourites();
+    } else {
+      setFavourites([]); // Ako korisnik nije prijavljen, lista je prazna
+    }
+  }, [user, isAuthenticated]);
+
+  const fetchFavourites = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/users/favourites",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        setFavourites(data);
+      } else {
+        console.error("Greška pri dohvatanju omiljenih filmova:", data.message);
+      }
+    } catch (error) {
+      console.error("❌ Greška pri dohvatanju omiljenih filmova:", error);
+    }
   };
 
-  const removeFromFavourites = (movieId) => {
-    setFavourites((prev) => {
-      const updatedFavourites = prev.filter((movie) => movie.id !== movieId);
-      localStorage.setItem("favourites", JSON.stringify(updatedFavourites));
-      return updatedFavourites;
-    });
+  const addToFavourites = async (movie) => {
+    if (!isAuthenticated) return;
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/users/favourites",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({ movieId: movie._id }),
+        }
+      );
+
+      if (response.ok) {
+        setFavourites((prev) => [...prev, movie]);
+      }
+    } catch (error) {
+      console.error("❌ Greška pri dodavanju filma u omiljene:", error);
+    }
+  };
+
+  const removeFromFavourites = async (movieId) => {
+    if (!isAuthenticated) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/users/favourites/${movieId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setFavourites((prev) => prev.filter((movie) => movie._id !== movieId));
+      }
+    } catch (error) {
+      console.error("❌ Greška pri uklanjanju filma iz omiljenih:", error);
+    }
   };
 
   const isFavourite = (movieId) =>
-    favourites.some((movie) => movie.id === movieId);
+    favourites.some((movie) => movie._id === movieId);
 
   return (
     <FavouriteContext.Provider

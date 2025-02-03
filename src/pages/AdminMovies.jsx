@@ -102,7 +102,7 @@ const AdminMovies = () => {
       <h2 className="text-danger text-center mb-4">Upravljanje filmovima</h2>
 
       {/* 📌 Forma za dodavanje filma */}
-      <div className="card p-4 mb-4 shadow">
+      <div className="card p-4 mb-4 shadow" style={{ overflowX: "auto" }}>
         <h4>Dodaj novi film</h4>
         <div className="row">
           <div className="col-md-6">
@@ -143,13 +143,6 @@ const AdminMovies = () => {
             />
 
             {/* 📌 Dugme za dodavanje filma (SADA ISPOD REŽISERA) */}
-            <button
-              className="btn btn-success mt-2"
-              onClick={handleAddMovie}
-              style={{ width: "200px" }}
-            >
-              Dodaj film
-            </button>
           </div>
           <div className="col-md-6">
             <input
@@ -214,13 +207,20 @@ const AdminMovies = () => {
                 />
                 <label className="form-check-label">Uskoro</label>
               </div>
+              <button
+                className="btn btn-success mt-2"
+                onClick={handleAddMovie}
+                style={{ width: "200px" }}
+              >
+                Dodaj film
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* 📌 Tabela za prikaz i izmenu filmova */}
-      <div className="table-responsive">
+      <div className="table-responsive" style={{ overflowX: "auto" }}>
         <table className="table table-dark table-bordered">
           <thead>
             <tr>

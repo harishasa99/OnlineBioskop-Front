@@ -1,73 +1,100 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import medaImage from "../assets/images/slika1.jpg";
-
-// Simulirani podaci za bioskop i film
-const mockData = {
-  movie: {
-    title: "Bob Dylan: Potpuni Neznanac",
-    image: medaImage,
-    cinema: "Cineplexx Big Kragujevac",
-    hall: "Sala 2",
-    format: "2D",
-    date: "14.01.2025",
-    time: "20:00",
-  },
-  maxTickets: 6,
-};
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Reservation = () => {
-  const { cinemaId, showtimeId } = useParams();
+  const { state } = useLocation();
   const navigate = useNavigate();
-
+  const [cinemaData, setCinemaData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [ticketCount, setTicketCount] = useState(0);
-  const { movie, maxTickets } = mockData;
+
+  useEffect(() => {
+    if (!state || !state.cinemaId || !state.movieId) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchCinemaData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/cinemas/${state.cinemaId}/movies/${state.showtime}`
+        );
+        if (!response.ok) throw new Error("Greška pri učitavanju podataka!");
+        const data = await response.json();
+
+        console.log("📌 API podaci primljeni u Reservation.jsx:", data); // ✅ Provera odgovora
+
+        setCinemaData(data);
+      } catch (error) {
+        console.error("❌ Greška pri učitavanju bioskopa i filma:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCinemaData();
+  }, [state]);
+
+  if (loading) return <h2 className="text-center text-light">Učitavanje...</h2>;
+  if (!cinemaData)
+    return <h2 className="text-center text-light">Podaci nisu dostupni!</h2>;
+
+  const { movie, cinema } = cinemaData;
+  const maxTickets = 6;
+  const pricePerTicket = movie.price;
 
   const handleNextStep = () => {
     if (ticketCount > 0) {
-      navigate(`/seats/${cinemaId}/${showtimeId}`, { state: { ticketCount } });
+      console.log("📌 Podaci koje šaljem u SeatSelection:", {
+        movieId: movie._id, // ✅ Proveri u konzoli da li postoji
+        cinemaId: state.cinemaId,
+        showtime: state.showtime,
+      });
+
+      navigate(
+        `/seats/${state.cinemaId}/${encodeURIComponent(state.showtime)}`,
+        {
+          state: {
+            movieTitle: movie.title,
+            movieImage: movie.image,
+            cinemaName: cinema.name,
+            cinemaLocation: cinema.location,
+            ticketCount,
+            pricePerTicket,
+            movieId: movie._id, // ✅ Dodajemo movieId
+          },
+        }
+      );
     }
   };
 
   return (
-    <div className="container my-5">
-      <div
-        className="row bg-dark text-light p-4 rounded shadow"
-        style={{
-          boxShadow: "0px 5px 15px rgba(0,0,0,0.5)",
-        }}
-      >
-        {/* Slika filma */}
+    <div className="container my-5 text-light">
+      <div className="row bg-dark p-4 rounded shadow">
         <div className="col-md-4">
           <img
-            src={movie.image}
+            src={
+              movie.image.startsWith("/")
+                ? `http://localhost:5000${movie.image}`
+                : movie.image
+            }
             alt={movie.title}
             className="img-fluid rounded"
-            style={{ objectFit: "cover", maxHeight: "300px" }}
+            style={{ maxHeight: "300px", objectFit: "cover" }}
           />
+          ` `
         </div>
-
-        {/* Informacije o filmu */}
         <div className="col-md-8">
-          <h3 className="text-danger fw-bold">{movie.title}</h3>
-          <p className="mb-1">
-            <strong className="text-danger">CINEPLEXX:</strong> {movie.cinema}
+          <h3 className="text-danger fw-bold text-uppercase">{movie.title}</h3>
+          <p>
+            <strong>Bioskop:</strong> {cinema.name} - {cinema.location}
           </p>
-          <p className="mb-1">
-            <strong className="text-danger">Sala:</strong> {movie.hall}
-          </p>
-          <p className="mb-1">
-            <strong className="text-danger">Format:</strong> {movie.format}
-          </p>
-          <p className="mb-1">
-            <strong className="text-danger">Datum i vreme:</strong> {movie.date}
-            , {movie.time}
+          <p>
+            <strong>Datum i vreme:</strong> {state.showtime}
           </p>
           <p className="text-muted">
-            Možete rezervisati do <strong>{maxTickets}</strong> ulaznica/dan
+            Možete rezervisati do <strong>{maxTickets}</strong> ulaznica.
           </p>
-
-          {/* Broj karata */}
           <div className="d-flex align-items-center mt-3">
             <button
               className="btn btn-secondary me-3"
@@ -89,11 +116,9 @@ const Reservation = () => {
           </div>
         </div>
       </div>
-
-      {/* Sledeći korak */}
       <div className="text-center mt-4">
         <button
-          className="btn btn-primary bg-danger btn-lg"
+          className="btn btn-danger btn-lg"
           onClick={handleNextStep}
           disabled={ticketCount === 0}
         >

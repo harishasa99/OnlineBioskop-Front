@@ -1,14 +1,13 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Modal, Button } from "react-bootstrap"; // 🆕 Dodato za modal
-import UserSidebar from "../components/UserSidebar";
+import { Modal, Button } from "react-bootstrap";
 import { UserContext } from "../context/UserContext";
 
 const MojNalog = () => {
   const { user, logoutUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false); // 🆕 Držimo stanje za prikaz modala
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,73 +64,62 @@ const MojNalog = () => {
   if (!user) return null;
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-md-3 col-lg-2 p-0">
-          <UserSidebar />
-        </div>
+    <div className="container my-5">
+      <h2 className="text-danger mb-4 text-center">MOJ NALOG</h2>
 
-        <div className="col-md-9 col-lg-10 p-4">
-          <h2 className="text-danger mb-4">MOJ NALOG</h2>
-
-          <div className="card user-card bg-dark text-light p-3">
-            <table className="table table-dark table-bordered user-table">
-              <tbody>
-                <tr>
-                  <th className="text-uppercase">Ime</th>
-                  <td>{user.firstName}</td>
-                </tr>
-                <tr>
-                  <th className="text-uppercase">Prezime</th>
-                  <td>{user.lastName}</td>
-                </tr>
-                <tr>
-                  <th className="text-uppercase">Datum rođenja</th>
-                  <td>
-                    {new Date(user.dateOfBirth).toLocaleDateString("sr-RS")}
-                  </td>
-                </tr>
-                <tr>
-                  <th className="text-uppercase">Pol</th>
-                  <td>{user.gender}</td>
-                </tr>
-                <tr>
-                  <th className="text-uppercase">Email</th>
-                  <td>{user.email}</td>
-                </tr>
-                <tr>
-                  <th className="text-uppercase">Omiljeni bioskop</th>
-                  <td>{user.favoriteCinema}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Dugmad sa modernijim dizajnom */}
-          <div className="mt-4 d-flex flex-wrap gap-3">
-            <button
-              onClick={() => navigate("/izmeni-podatke")}
-              className="btn btn-primary modern-btn"
-            >
-              <i className="fas fa-pencil-alt"></i> Izmeni podatke
-            </button>
-            <button
-              onClick={() => navigate("/promeni-lozinku")}
-              className="btn btn-warning modern-btn"
-            >
-              <i className="fas fa-key"></i> Promeni lozinku
-            </button>
-            <button
-              onClick={() => setShowModal(true)} // 🆕 Otvara modal
-              className="btn btn-outline-danger modern-btn"
-            >
-              <i className="fas fa-trash-alt"></i> Obriši nalog
-            </button>
-          </div>
-        </div>
+      <div className="card user-card bg-dark text-light p-3">
+        <table className="table table-dark table-bordered user-table">
+          <tbody>
+            <tr>
+              <th className="text-uppercase">Ime</th>
+              <td>{user.firstName}</td>
+            </tr>
+            <tr>
+              <th className="text-uppercase">Prezime</th>
+              <td>{user.lastName}</td>
+            </tr>
+            <tr>
+              <th className="text-uppercase">Datum rođenja</th>
+              <td>{new Date(user.dateOfBirth).toLocaleDateString("sr-RS")}</td>
+            </tr>
+            <tr>
+              <th className="text-uppercase">Pol</th>
+              <td>{user.gender}</td>
+            </tr>
+            <tr>
+              <th className="text-uppercase">Email</th>
+              <td>{user.email}</td>
+            </tr>
+            <tr>
+              <th className="text-uppercase">Omiljeni bioskop</th>
+              <td>{user.favoriteCinema}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      {/* 🆕 MODAL ZA BRISANJE NALOGA */}
+      <div className="mt-4 d-flex flex-wrap gap-3 justify-content-center">
+        <button
+          onClick={() => navigate("/izmeni-podatke")}
+          className="btn btn-primary modern-btn"
+        >
+          <i className="fas fa-pencil-alt"></i> Izmeni podatke
+        </button>
+        <button
+          onClick={() => navigate("/promeni-lozinku")}
+          className="btn btn-warning modern-btn"
+        >
+          <i className="fas fa-key"></i> Promeni lozinku
+        </button>
+        <button
+          onClick={() => setShowModal(true)}
+          className="btn btn-outline-danger modern-btn"
+        >
+          <i className="fas fa-trash-alt"></i> Obriši nalog
+        </button>
+      </div>
+
+      {/* MODAL ZA BRISANJE NALOGA */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">BRISANJE NALOGA</Modal.Title>

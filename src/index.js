@@ -1,19 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom/client"; // Ovo je ispravna import linija za React 18
+import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./styles/style.css"; // Dodajte ovde vaš CSS fajl
+import "./styles/style.css";
+import { UserProvider } from "./context/UserContext";
 import { SliderProvider } from "./context/SliderContext";
+import { FavouriteProvider } from "./context/FavouriteContext";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FavouriteProvider } from "./context/FavouriteContext";
 
-const root = ReactDOM.createRoot(document.getElementById("root")); // Pravimo root element
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <SliderProvider>
-      <FavouriteProvider>
-        <App />
-      </FavouriteProvider>
-    </SliderProvider>
+    <UserProvider>
+      {" "}
+      <SliderProvider>
+        <FavouriteProvider>
+          <App />
+        </FavouriteProvider>
+      </SliderProvider>
+    </UserProvider>
   </React.StrictMode>
 );

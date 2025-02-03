@@ -9,13 +9,12 @@ const AdminUsers = () => {
   const { user, refreshUser, isAdmin } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // ✅ Modal state za brisanje korisnika
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     if (!isAdmin) {
-      navigate("/"); // ⬅️ Ako korisnik više nije admin, preusmeri ga
+      navigate("/");
       return;
     }
     fetchUsers();
@@ -39,19 +38,16 @@ const AdminUsers = () => {
     }
   };
 
-  // ✅ Otvaranje modala za brisanje
   const openDeleteModal = (user) => {
     setSelectedUser(user);
     setShowDeleteModal(true);
   };
 
-  // ✅ Zatvaranje modala
   const closeDeleteModal = () => {
     setSelectedUser(null);
     setShowDeleteModal(false);
   };
 
-  // ✅ Brisanje korisnika
   const deleteUser = async () => {
     if (!selectedUser) return;
 
@@ -68,7 +64,7 @@ const AdminUsers = () => {
 
       if (response.ok) {
         setUsers(users.filter((user) => user._id !== selectedUser._id));
-        closeDeleteModal(); // ⬅️ Zatvori modal nakon brisanja
+        closeDeleteModal();
       } else {
         console.error("Greška pri brisanju korisnika.");
       }
@@ -77,7 +73,6 @@ const AdminUsers = () => {
     }
   };
 
-  // ✅ Izmena uloge korisnika
   const updateUserRole = async (userId, newRole) => {
     try {
       const response = await fetch(
@@ -101,7 +96,6 @@ const AdminUsers = () => {
           )
         );
 
-        // ✅ Ako admin sebi menja ulogu, osveži korisnika i preusmeri
         if (userId === user._id) {
           await refreshUser();
           navigate("/");
@@ -131,44 +125,82 @@ const AdminUsers = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <table className="table table-dark table-bordered text-center">
-        <thead>
-          <tr>
-            <th>Ime</th>
-            <th>Prezime</th>
-            <th>Email</th>
-            <th>Uloga</th>
-            <th>Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user._id}>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
-              <td>{user.email}</td>
-              <td>
-                <select
-                  className="form-select bg-dark text-light"
-                  value={user.role}
-                  onChange={(e) => updateUserRole(user._id, e.target.value)}
-                >
-                  <option value="user">Korisnik</option>
-                  <option value="admin">Administrator</option>
-                </select>
-              </td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => openDeleteModal(user)}
-                >
-                  Obriši
-                </button>
-              </td>
+
+      {/* 🚀 Responzivna tabela */}
+      <div className="table-responsive d-none d-md-block">
+        <table className="table table-dark table-bordered text-center">
+          <thead>
+            <tr>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Email</th>
+              <th>Uloga</th>
+              <th>Akcije</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredUsers.map((user) => (
+              <tr key={user._id}>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
+                <td>{user.email}</td>
+                <td>
+                  <select
+                    className="form-select bg-dark text-light"
+                    value={user.role}
+                    onChange={(e) => updateUserRole(user._id, e.target.value)}
+                  >
+                    <option value="user">Korisnik</option>
+                    <option value="admin">Administrator</option>
+                  </select>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => openDeleteModal(user)}
+                  >
+                    Obriši
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 📌 Mobilna verzija - Kartice */}
+      <div className="d-md-none">
+        {filteredUsers.map((user) => (
+          <div key={user._id} className="card bg-dark text-light mb-3 p-3">
+            <p>
+              <strong>Ime:</strong> {user.firstName}
+            </p>
+            <p>
+              <strong>Prezime:</strong> {user.lastName}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>Uloga:</strong>{" "}
+              <select
+                className="form-select bg-dark text-light"
+                value={user.role}
+                onChange={(e) => updateUserRole(user._id, e.target.value)}
+              >
+                <option value="user">Korisnik</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </p>
+            <button
+              className="btn btn-danger"
+              onClick={() => openDeleteModal(user)}
+            >
+              Obriši
+            </button>
+          </div>
+        ))}
+      </div>
 
       {filteredUsers.length === 0 && (
         <p className="text-light text-center">Nema pronađenih korisnika.</p>
