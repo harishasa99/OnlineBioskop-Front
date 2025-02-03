@@ -14,7 +14,7 @@ const SearchPage = () => {
   const fetchMovies = async (query) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/movies?search=${query}`
+        `https://onlinebiskop-production.up.railway.app/api/movies?search=${query}`
       );
       const data = await response.json();
       setMovies(data);

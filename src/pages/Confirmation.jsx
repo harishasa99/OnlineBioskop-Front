@@ -55,7 +55,7 @@ const Confirmation = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/tickets/purchase",
+        "https://onlinebiskop-production.up.railway.app/api/tickets/purchase",
         {
           method: "POST",
           headers: {
@@ -94,7 +94,7 @@ const Confirmation = () => {
           <img
             src={
               movieImage.startsWith("/")
-                ? `http://localhost:5000${movieImage}`
+                ? `https://onlinebiskop-production.up.railway.app${movieImage}`
                 : movieImage
             }
             alt={movieTitle || "Film"}

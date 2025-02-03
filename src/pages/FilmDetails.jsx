@@ -12,7 +12,9 @@ const FilmDetails = () => {
 
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/movies/${id}`);
+        const response = await fetch(
+          `https://onlinebiskop-production.up.railway.app/api/movies/${id}`
+        );
         if (!response.ok) throw new Error("Neuspešno učitavanje filma!");
         const data = await response.json();
 
@@ -57,7 +59,7 @@ const FilmDetails = () => {
     : "N/A";
 
   const imageSrc = movie.image?.startsWith("/")
-    ? `http://localhost:5000${movie.image}`
+    ? `https://onlinebiskop-production.up.railway.app${movie.image}`
     : movie.image || "https://placehold.co/300x450?text=Nema+Slike";
 
   return (

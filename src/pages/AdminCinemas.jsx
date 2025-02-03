@@ -16,11 +16,14 @@ const AdminCinemas = () => {
 
   const fetchCinemas = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/cinemas", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/cinemas",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = await response.json();
       setCinemas(data);
     } catch (error) {
@@ -30,11 +33,14 @@ const AdminCinemas = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/movies", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/movies",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = await response.json();
       setMovies(data);
     } catch (error) {
@@ -49,14 +55,17 @@ const AdminCinemas = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/cinemas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify(newCinema),
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/cinemas",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify(newCinema),
+        }
+      );
 
       if (response.ok) {
         fetchCinemas();
@@ -79,7 +88,7 @@ const AdminCinemas = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cinemas/${selectedCinema}/addMovie`,
+        `https://onlinebiskop-production.up.railway.app/api/cinemas/${selectedCinema}/addMovie`,
         {
           method: "PUT",
           headers: {
@@ -112,13 +121,16 @@ const AdminCinemas = () => {
       return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/cinemas/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        `https://onlinebiskop-production.up.railway.app/api/cinemas/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
       if (response.ok) {
         fetchCinemas();

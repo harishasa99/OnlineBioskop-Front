@@ -20,7 +20,9 @@ const AdminMovies = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/movies");
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/movies"
+      );
       const data = await response.json();
       setMovies(data);
     } catch (error) {
@@ -45,13 +47,16 @@ const AdminMovies = () => {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const response = await fetch("http://localhost:5000/api/movies", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/movies",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -80,12 +85,15 @@ const AdminMovies = () => {
       return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/movies/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        `https://onlinebiskop-production.up.railway.app/api/movies/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
       if (response.ok) {
         setMovies(movies.filter((movie) => movie._id !== id));

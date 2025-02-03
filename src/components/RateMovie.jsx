@@ -38,14 +38,17 @@ const RateMovie = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/ratings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, // ✅ Dodajemo token u header
-        },
-        body: JSON.stringify({ movieId, rating }),
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/ratings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // ✅ Dodajemo token u header
+          },
+          body: JSON.stringify({ movieId, rating }),
+        }
+      );
 
       const data = await response.json();
       console.log("📩 Odgovor sa servera:", data);

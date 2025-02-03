@@ -45,7 +45,7 @@ const MovieCard = ({ movie }) => {
           src={
             movie.image.startsWith("http")
               ? movie.image
-              : `http://localhost:5000${movie.image}`
+              : `https://onlinebiskop-production.up.railway.app${movie.image}`
           }
           className="card-img-top"
           alt={movie.title}

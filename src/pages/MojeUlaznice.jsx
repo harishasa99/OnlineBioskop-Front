@@ -19,7 +19,7 @@ const MojeUlaznice = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/tickets/my-tickets",
+          "https://onlinebiskop-production.up.railway.app/api/tickets/my-tickets",
           {
             method: "GET",
             headers: {
@@ -61,7 +61,7 @@ const MojeUlaznice = () => {
                 <img
                   src={
                     ticket.movie.image.startsWith("/")
-                      ? `http://localhost:5000${ticket.movie.image}`
+                      ? `https://onlinebiskop-production.up.railway.app/${ticket.movie.image}`
                       : ticket.movie.image
                   }
                   alt={ticket.movie.title}

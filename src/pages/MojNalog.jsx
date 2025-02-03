@@ -13,12 +13,15 @@ const MojNalog = () => {
     const fetchUser = async () => {
       if (!user) {
         try {
-          const response = await fetch("http://localhost:5000/api/users/me", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          });
+          const response = await fetch(
+            "https://onlinebiskop-production.up.railway.app/api/users/me",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
 
           const data = await response.json();
 
@@ -42,12 +45,15 @@ const MojNalog = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/users/delete", {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/users/delete",
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
       if (response.ok) {
         logoutUser();

@@ -17,7 +17,7 @@ const Reservation = () => {
     const fetchCinemaData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/cinemas/${state.cinemaId}/movies/${state.showtime}`
+          `https://onlinebiskop-production.up.railway.app/api/cinemas/${state.cinemaId}/movies/${state.showtime}`
         );
         if (!response.ok) throw new Error("Greška pri učitavanju podataka!");
         const data = await response.json();
@@ -75,7 +75,7 @@ const Reservation = () => {
           <img
             src={
               movie.image.startsWith("/")
-                ? `http://localhost:5000${movie.image}`
+                ? `https://onlinebiskop-production.up.railway.app${movie.image}`
                 : movie.image
             }
             alt={movie.title}

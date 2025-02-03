@@ -20,7 +20,7 @@ export const FavouriteProvider = ({ children }) => {
   const fetchFavourites = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/favourites",
+        "https://onlinebiskop-production.up.railway.app/api/users/favourites",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -44,7 +44,7 @@ export const FavouriteProvider = ({ children }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/favourites",
+        "https://onlinebiskop-production.up.railway.app/api/users/favourites",
         {
           method: "POST",
           headers: {
@@ -68,7 +68,7 @@ export const FavouriteProvider = ({ children }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/favourites/${movieId}`,
+        `https://onlinebiskop-production.up.railway.app/api/users/favourites/${movieId}`,
         {
           method: "DELETE",
           headers: {

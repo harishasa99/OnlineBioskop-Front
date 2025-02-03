@@ -15,7 +15,7 @@ const MovieSlider = () => {
   const fetchMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/movies/category/Uskoro"
+        "https://onlinebiskop-production.up.railway.app/api/movies/category/Uskoro"
       );
       const data = await response.json();
       setMovies(data);
@@ -55,7 +55,7 @@ const MovieSlider = () => {
             src={
               movie.image.startsWith("http")
                 ? movie.image
-                : `http://localhost:5000${movie.image}`
+                : `https://onlinebiskop-production.up.railway.app${movie.image}`
             }
             alt={movie.title}
             style={{ maxHeight: "500px", objectFit: "cover" }}

@@ -12,7 +12,7 @@ const UBioskopu = () => {
   const fetchMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/movies/category/U bioskopu"
+        "https://onlinebiskop-production.up.railway.app/api/movies/category/U bioskopu"
       );
       const data = await response.json();
       setMovies(data);

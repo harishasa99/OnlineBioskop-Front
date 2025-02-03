@@ -27,7 +27,7 @@ const SeatSelection = () => {
     const fetchSeats = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/showtimes/${encodeURIComponent(
+          `https://onlinebiskop-production.up.railway.app/api/showtimes/${encodeURIComponent(
             showtimeId
           )}/seats`
         );
@@ -54,10 +54,13 @@ const SeatSelection = () => {
       console.log("🔑 Access Token pronađen u localStorage:", accessToken);
 
       try {
-        const response = await fetch("http://localhost:5000/api/users/me", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await fetch(
+          "https://onlinebiskop-production.up.railway.app/api/users/me",
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
 
         const data = await response.json();
 

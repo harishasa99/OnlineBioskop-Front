@@ -15,10 +15,13 @@ export const UserProvider = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users/me", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          "https://onlinebiskop-production.up.railway.app/api/users/me",
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const data = await response.json();
 
@@ -46,10 +49,13 @@ export const UserProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/me", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/users/me",
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const data = await response.json();
 

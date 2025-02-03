@@ -22,11 +22,14 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/admin/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await fetch(
+        "https://onlinebiskop-production.up.railway.app/api/admin/users",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         setUsers(data);
@@ -53,7 +56,7 @@ const AdminUsers = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/users/${selectedUser._id}`,
+        `https://onlinebiskop-production.up.railway.app/api/admin/users/${selectedUser._id}`,
         {
           method: "DELETE",
           headers: {
@@ -76,7 +79,7 @@ const AdminUsers = () => {
   const updateUserRole = async (userId, newRole) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}/role`,
+        `https://onlinebiskop-production.up.railway.app/api/admin/users/${userId}/role`,
         {
           method: "PUT",
           headers: {

@@ -12,7 +12,7 @@ const Uskoro = () => {
   const fetchMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/movies/category/Uskoro"
+        "https://onlinebiskop-production.up.railway.app/api/movies/category/Uskoro"
       );
       const data = await response.json();
       setMovies(data);

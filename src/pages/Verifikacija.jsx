@@ -9,7 +9,7 @@ const Verifikacija = () => {
     const verifyAccount = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/auth/verify/${token}`
+          `https://onlinebiskop-production.up.railway.app/api/auth/verify/${token}`
         );
         const data = await response.json();
 
