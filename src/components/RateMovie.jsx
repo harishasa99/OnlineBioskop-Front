@@ -77,7 +77,7 @@ const RateMovie = () => {
         <img
           src={
             movieImage.startsWith("/")
-              ? `http://localhost:5000${movieImage}`
+              ? `https://onlinebiskop-production.up.railway.app${movieImage}`
               : movieImage
           }
           alt={movieTitle}

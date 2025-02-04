@@ -61,7 +61,7 @@ const MojeUlaznice = () => {
                 <img
                   src={
                     ticket.movie.image.startsWith("/")
-                      ? `https://onlinebiskop-production.up.railway.app/${ticket.movie.image}`
+                      ? `https://onlinebiskop-production.up.railway.app${ticket.movie.image}`
                       : ticket.movie.image
                   }
                   alt={ticket.movie.title}
