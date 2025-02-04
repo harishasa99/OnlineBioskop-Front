@@ -24,13 +24,16 @@ const SeatSelection = () => {
 
   useEffect(() => {
     console.log("📌 Showtime ID primljen u SeatSelection:", showtimeId);
+    if (!showtimeId.match(/^[0-9a-fA-F]{24}$/)) {
+      console.error("❌ showtimeId nije ObjectId! Vrednost:", showtimeId);
+    } else {
+      console.log("✅ showtimeId je validan ObjectId:", showtimeId);
+    }
 
     const fetchSeats = async () => {
       try {
         const response = await fetch(
-          `https://onlinebiskop-production.up.railway.app/api/showtimes/${encodeURIComponent(
-            showtimeId
-          )}/seats`
+          `https://onlinebiskop-production.up.railway.app/api/showtimes/${showtimeId}/seats`
         );
         if (!response.ok) throw new Error("Greška pri učitavanju sedišta!");
         const data = await response.json();

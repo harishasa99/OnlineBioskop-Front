@@ -51,20 +51,17 @@ const Reservation = () => {
         showtime: state.showtime,
       });
 
-      navigate(
-        `/seats/${state.cinemaId}/${encodeURIComponent(state.showtime)}`,
-        {
-          state: {
-            movieTitle: movie.title,
-            movieImage: movie.image,
-            cinemaName: cinema.name,
-            cinemaLocation: cinema.location,
-            ticketCount,
-            pricePerTicket,
-            movieId: movie._id, // ✅ Dodajemo movieId
-          },
-        }
-      );
+      navigate(`/seats/${state.cinemaId}/${state.showtime}`, {
+        state: {
+          movieTitle: movie.title,
+          movieImage: movie.image,
+          cinemaName: cinema.name,
+          cinemaLocation: cinema.location,
+          ticketCount,
+          pricePerTicket,
+          movieId: movie._id, // ✅ Dodajemo movieId
+        },
+      });
     }
   };
 
