@@ -70,7 +70,7 @@ const SearchPage = () => {
             >
               {/* Prikaz slike filma */}
               <img
-                src={`http://localhost:5000${movie.image}`}
+                src={`https://onlinebiskop-production.up.railway.app${movie.image}`}
                 alt={movie.title}
                 className="me-3 rounded"
                 style={{ width: "150px", height: "200px", objectFit: "cover" }}

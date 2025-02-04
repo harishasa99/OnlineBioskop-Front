@@ -228,7 +228,10 @@ const AdminMovies = () => {
       </div>
 
       {/* 📌 Tabela za prikaz i izmenu filmova */}
-      <div className="table-responsive" style={{ overflowX: "auto" }}>
+      <div
+        className="table-responsive"
+        style={{ overflowX: "auto", maxHeight: "500px", overflowY: "auto" }}
+      >
         <table className="table table-dark table-bordered">
           <thead>
             <tr>
