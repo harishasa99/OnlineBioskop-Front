@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const SeatSelection = () => {
   const { cinemaId, showtimeId } = useParams();
+  console.log("📌 Showtime ID primljen u SeatSelection:", showtimeId);
   const { state } = useLocation();
   const navigate = useNavigate();
 
