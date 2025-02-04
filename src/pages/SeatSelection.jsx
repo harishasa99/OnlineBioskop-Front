@@ -27,7 +27,7 @@ const SeatSelection = () => {
     const fetchSeats = async () => {
       try {
         const response = await fetch(
-          `https://onlinebiskop-production.up.railway.app/api/showtimes${encodeURIComponent(
+          `https://onlinebiskop-production.up.railway.app/api/showtimes/${encodeURIComponent(
             showtimeId
           )}/seats`
         );
