@@ -33,7 +33,9 @@ const SeatSelection = () => {
     const fetchSeats = async () => {
       try {
         const response = await fetch(
-          `https://onlinebiskop-production.up.railway.app/api/showtimes/${showtimeId}/seats`
+          `https://onlinebiskop-production.up.railway.app/api/showtimes/${encodeURIComponent(
+            showtimeId
+          )}/seats`
         );
         if (!response.ok) throw new Error("Greška pri učitavanju sedišta!");
         const data = await response.json();

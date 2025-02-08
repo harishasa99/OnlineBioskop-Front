@@ -51,7 +51,7 @@ const Reservation = () => {
         showtime: state.showtime,
       });
 
-      navigate(`/seats/${state.cinemaId}/${state.showtimeId}`, {
+      navigate(`/seats/${state.cinemaId}/${state.showtime}`, {
         state: {
           movieTitle: movie.title,
           movieImage: movie.image,
