@@ -56,6 +56,7 @@ const Reservation = () => {
           movieTitle: movie.title,
           movieImage: movie.image,
           cinemaName: cinema.name,
+          cinemaId: state.cinemaId,
           cinemaLocation: cinema.location,
           ticketCount,
           pricePerTicket,

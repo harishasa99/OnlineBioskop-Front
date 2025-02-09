@@ -14,7 +14,7 @@ const SeatSelection = () => {
     cinemaName = "",
     cinemaLocation = "",
     pricePerTicket = 0,
-    movieId,
+    movieId
   } = state || {};
 
   const [seats, setSeats] = useState({ availableSeats: [], bookedSeats: [] });
@@ -35,7 +35,7 @@ const SeatSelection = () => {
         const response = await fetch(
           `https://onlinebiskop-production.up.railway.app/api/showtimes/${encodeURIComponent(
             showtimeId
-          )}/seats`
+          )}/${movieId}/${cinemaId}/seats`
         );
         if (!response.ok) throw new Error("Greška pri učitavanju sedišta!");
         const data = await response.json();
