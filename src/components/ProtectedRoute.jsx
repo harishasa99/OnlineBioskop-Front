@@ -5,19 +5,23 @@ import { UserContext } from "../context/UserContext";
 const ProtectedRoute = ({ element }) => {
   const { user, isAdmin } = useContext(UserContext);
   const location = useLocation();
-  const [isAllowed, setIsAllowed] = useState(null);
+  const [isAllowed, setIsAllowed] = useState(() => {
+    return localStorage.getItem("isAdmin") === "true";
+  });
 
   useEffect(() => {
-    if (!user) {
-      setIsAllowed(false);
-    } else if (!isAdmin && location.pathname.startsWith("/admin")) {
-      setIsAllowed(false);
-    } else {
-      setIsAllowed(true);
+    if (user) {
+      if (isAdmin) {
+        setIsAllowed(true);
+        localStorage.setItem("isAdmin", "true");
+      } else {
+        setIsAllowed(false);
+        localStorage.removeItem("isAdmin");
+      }
     }
-  }, [user, isAdmin, location.pathname]);
+  }, [user, isAdmin]);
 
-  if (isAllowed === null) return null; // ⏳ Čekaj dok ne dobije podatke
+  if (isAllowed === null) return null;
 
   return isAllowed ? element : <Navigate to="/" />;
 };
