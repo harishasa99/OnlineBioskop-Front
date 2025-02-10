@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Registracija = () => {
   const [formData, setFormData] = useState({
@@ -34,10 +34,12 @@ const Registracija = () => {
     fetchCinemas();
   }, []);
 
+  // Funkcija za ažuriranje podataka u formi
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Funkcija za slanje podataka na backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {
@@ -51,15 +53,18 @@ const Registracija = () => {
       confirmPassword,
     } = formData;
 
+    console.log("📤 Podaci koji se šalju na backend:", formData);
+
+    // Validacija podataka
     if (
-      !firstName ||
-      !lastName ||
+      !firstName.trim() ||
+      !lastName.trim() ||
       !dateOfBirth ||
-      !gender ||
-      !favoriteCinema ||
-      !email ||
-      !password ||
-      !confirmPassword
+      !gender.trim() ||
+      !favoriteCinema.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmPassword.trim()
     ) {
       setError("Molimo popunite sva obavezna polja!");
       return;
@@ -87,6 +92,8 @@ const Registracija = () => {
       );
 
       const data = await response.json();
+
+      console.log("📥 Odgovor sa backenda:", data);
 
       if (response.ok) {
         setSuccess(
@@ -124,6 +131,68 @@ const Registracija = () => {
       >
         <h5 className="text-danger mb-4">OBAVEZNE INFORMACIJE</h5>
 
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="firstName" className="form-label">
+              Ime
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="lastName" className="form-label">
+              Prezime
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="dateOfBirth" className="form-label">
+              Datum rođenja
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="gender" className="form-label">
+              Pol
+            </label>
+            <select
+              className="form-control"
+              id="gender"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <option value="">Izaberite pol</option>
+              <option value="Muško">Muško</option>
+              <option value="Žensko">Žensko</option>
+              <option value="Drugo">Drugo</option>
+            </select>
+          </div>
+        </div>
+
         <div className="mb-3">
           <label htmlFor="favoriteCinema" className="form-label">
             Omiljeni bioskop
@@ -142,6 +211,49 @@ const Registracija = () => {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            E-Mail adresa
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="password" className="form-label">
+              Lozinka
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="confirmPassword" className="form-label">
+              Ponovite lozinku
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+          </div>
         </div>
 
         <button type="submit" className="btn btn-danger w-100 mt-4">
