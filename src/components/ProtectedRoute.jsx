@@ -1,29 +1,20 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
 const ProtectedRoute = ({ element }) => {
-  const { user, isAdmin } = useContext(UserContext);
+  const { user, isAdmin, loading } = useContext(UserContext);
   const location = useLocation();
-  const [isAllowed, setIsAllowed] = useState(() => {
-    return localStorage.getItem("isAdmin") === "true";
-  });
 
-  useEffect(() => {
-    if (user) {
-      if (isAdmin) {
-        setIsAllowed(true);
-        localStorage.setItem("isAdmin", "true");
-      } else {
-        setIsAllowed(false);
-        localStorage.removeItem("isAdmin");
-      }
-    }
-  }, [user, isAdmin]);
+  if (loading) return null; // ⏳ Sačekaj dok se ne učita korisnik
 
-  if (isAllowed === null) return null;
+  if (!user) return <Navigate to="/prijava" state={{ from: location }} />;
 
-  return isAllowed ? element : <Navigate to="/" />;
+  if (!isAdmin && location.pathname.startsWith("/admin")) {
+    return <Navigate to="/" />;
+  }
+
+  return element;
 };
 
 export default ProtectedRoute;
