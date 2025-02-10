@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Registracija = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +39,6 @@ const Registracija = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Funkcija za slanje podataka na backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {
