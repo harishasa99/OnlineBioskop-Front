@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Registracija = () => {
   const [formData, setFormData] = useState({
@@ -12,21 +12,32 @@ const Registracija = () => {
     confirmPassword: "",
   });
 
+  const [cinemas, setCinemas] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Funkcija za ažuriranje podataka u formi
+  useEffect(() => {
+    const fetchCinemas = async () => {
+      try {
+        const response = await fetch(
+          "https://onlinebiskop-production.up.railway.app/api/cinemas"
+        );
+        if (!response.ok) throw new Error("Greška pri učitavanju bioskopa!");
+        const data = await response.json();
+        setCinemas(data);
+      } catch (err) {
+        console.error("❌ Greška pri učitavanju bioskopa:", err);
+        setError("Ne mogu da dohvatim listu bioskopa.");
+      }
+    };
+
+    fetchCinemas();
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Funkcija za proveru ispravnosti e-mail adrese
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  // Funkcija za slanje podataka na backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     const {
@@ -40,25 +51,22 @@ const Registracija = () => {
       confirmPassword,
     } = formData;
 
-    console.log("📤 Podaci koji se šalju na backend:", formData);
-
-    // Validacija podataka
     if (
-      !firstName.trim() ||
-      !lastName.trim() ||
+      !firstName ||
+      !lastName ||
       !dateOfBirth ||
-      !gender.trim() ||
-      !favoriteCinema.trim() ||
-      !email.trim() ||
-      !password.trim() ||
-      !confirmPassword.trim()
+      !gender ||
+      !favoriteCinema ||
+      !email ||
+      !password ||
+      !confirmPassword
     ) {
       setError("Molimo popunite sva obavezna polja!");
       return;
     }
 
     try {
-      const formattedDateOfBirth = new Date(dateOfBirth).toISOString(); // Pretvaramo datum u ispravan format
+      const formattedDateOfBirth = new Date(dateOfBirth).toISOString();
 
       const response = await fetch(
         "https://onlinebiskop-production.up.railway.app/api/auth/register",
@@ -79,8 +87,6 @@ const Registracija = () => {
       );
 
       const data = await response.json();
-
-      console.log("📥 Odgovor sa backenda:", data);
 
       if (response.ok) {
         setSuccess(
@@ -118,68 +124,6 @@ const Registracija = () => {
       >
         <h5 className="text-danger mb-4">OBAVEZNE INFORMACIJE</h5>
 
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label htmlFor="firstName" className="form-label">
-              Ime
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="lastName" className="form-label">
-              Prezime
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label htmlFor="dateOfBirth" className="form-label">
-              Datum rođenja
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              id="dateOfBirth"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="gender" className="form-label">
-              Pol
-            </label>
-            <select
-              className="form-control"
-              id="gender"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-            >
-              <option value="">Izaberite pol</option>
-              <option value="Muško">Muško</option>
-              <option value="Žensko">Žensko</option>
-              <option value="Drugo">Drugo</option>
-            </select>
-          </div>
-        </div>
-
         <div className="mb-3">
           <label htmlFor="favoriteCinema" className="form-label">
             Omiljeni bioskop
@@ -192,55 +136,12 @@ const Registracija = () => {
             onChange={handleChange}
           >
             <option value="">Izaberite bioskop</option>
-            <option value="Cineplexx Kragujevac">Cineplexx Kragujevac</option>
-            <option value="Cineplexx Beograd">Cineplexx Beograd</option>
-            <option value="Arena Cineplex Novi Sad">
-              Arena Cineplex Novi Sad
-            </option>
+            {cinemas.map((cinema) => (
+              <option key={cinema._id} value={cinema._id}>
+                {cinema.name}
+              </option>
+            ))}
           </select>
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            E-Mail adresa
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label htmlFor="password" className="form-label">
-              Lozinka
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="confirmPassword" className="form-label">
-              Ponovite lozinku
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-          </div>
         </div>
 
         <button type="submit" className="btn btn-danger w-100 mt-4">
