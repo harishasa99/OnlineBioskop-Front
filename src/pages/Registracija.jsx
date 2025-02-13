@@ -203,6 +203,7 @@ const Registracija = () => {
             value={formData.favoriteCinema}
             onChange={handleChange}
           >
+            <option value="custom-cinema">Cinee</option>
             <option value="">Izaberite bioskop</option>
             {cinemas.map((cinema) => (
               <option key={cinema._id} value={cinema._id}>
